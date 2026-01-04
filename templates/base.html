@@ -13,14 +13,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .nav-avatar {
+            width: 34px;
+            height: 34px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+        }
+    </style>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand fixed-top shadow-sm glass-navbar">
+<nav class="navbar navbar-expand fixed-top shadow-sm">
     <div class="container" style="max-width: 980px;">
-        <a class="navbar-brand brand-logo" href="{{ url_for('home') }}">Lumière</a>
+        <a class="navbar-brand brand-logo" href="{{ url_for('home') }}">
+            Lumière
+        </a>
 
         <div class="d-flex align-items-center gap-3">
             {% if current_user.is_authenticated %}
