@@ -10,17 +10,33 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <style>
-        .nav-avatar {
-            width: 34px;
-            height: 34px;
-            object-fit: cover;
+        /* Additional inline styles */
+        .navbar-brand {
+            padding: 5px 0;
+        }
+        
+        .user-dropdown-toggle::after {
+            display: none;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -34,63 +50,119 @@
             Lumière
         </a>
 
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-4">
             {% if current_user.is_authenticated %}
 
                 <!-- Search -->
-                <form action="{{ url_for('feed') }}" method="get" class="d-none d-md-block">
+                <form action="{{ url_for('feed') }}" method="get" class="d-none d-md-block position-relative">
                     <input type="search" name="q" class="form-control search-input"
                            placeholder="Search moments...">
+                    <i class="fas fa-search position-absolute" style="right: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.9rem;"></i>
                 </form>
 
                 <!-- Explore Icon -->
-                <a href="{{ url_for('feed') }}" class="nav-icon" title="Explore">
+                <a href="{{ url_for('feed') }}" class="nav-icon position-relative" title="Explore">
                     <i class="fas fa-compass"></i>
                 </a>
 
                 <!-- Upload Icon for Creators -->
                 {% if current_user.role == 'creator' %}
-                <a href="{{ url_for('creator_dashboard') }}" class="nav-icon" title="Upload">
+                <a href="{{ url_for('creator_dashboard') }}" class="nav-icon position-relative" title="Upload">
                     <i class="fas fa-cloud-upload-alt"></i>
                 </a>
                 {% endif %}
 
+                <!-- Notifications Icon -->
+                <a href="#" class="nav-icon position-relative" title="Notifications">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
+
                 <!-- User Dropdown -->
                 <div class="dropdown">
-                    <a href="#" data-bs-toggle="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none user-dropdown-toggle" data-bs-toggle="dropdown">
                         {% if current_user.avatar %}
-                            <img src="{{ current_user.avatar if current_user.avatar.startswith('http')
-                            else url_for('static', filename='uploads/' + current_user.avatar) }}"
-                            class="nav-avatar">
+                            <div class="position-relative">
+                                <img src="{{ current_user.avatar if current_user.avatar.startswith('http')
+                                else url_for('static', filename='uploads/' + current_user.avatar) }}"
+                                class="nav-avatar">
+                                <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle" 
+                                      style="width: 10px; height: 10px;"></span>
+                            </div>
+                            <span class="ms-2 d-none d-md-inline fw-medium" style="color: var(--primary);">{{ current_user.username }}</span>
                         {% else %}
-                            <i class="fas fa-user-circle fs-3 text-muted"></i>
+                            <div class="position-relative">
+                                <div class="nav-avatar bg-light d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-user text-primary"></i>
+                                </div>
+                                <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle" 
+                                      style="width: 10px; height: 10px;"></span>
+                            </div>
                         {% endif %}
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end glass-menu">
-                        <li><a class="dropdown-item" href="{{ url_for('profile', username=current_user.username) }}">My Gallery</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('edit_profile') }}">Settings</a></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ url_for('profile', username=current_user.username) }}">
+                                <i class="fas fa-images me-3" style="color: var(--primary);"></i>
+                                <div>
+                                    <div class="fw-semibold">My Gallery</div>
+                                    <small class="text-muted">Your photos & collections</small>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ url_for('edit_profile') }}">
+                                <i class="fas fa-cog me-3" style="color: var(--secondary);"></i>
+                                <div>
+                                    <div class="fw-semibold">Settings</div>
+                                    <small class="text-muted">Account preferences</small>
+                                </div>
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}">Logout</a></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center text-danger" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-3"></i>
+                                <div>
+                                    <div class="fw-semibold">Logout</div>
+                                    <small>Sign out from your account</small>
+                                </div>
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
             {% else %}
-                <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm rounded-pill px-4">Login</a>
-                <a href="{{ url_for('register') }}" class="ms-3 fw-semibold text-decoration-none accent-link">
-                    Create Account
-                </a>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm rounded-pill px-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    <a href="{{ url_for('register') }}" class="fw-semibold text-decoration-none accent-link">
+                        <i class="fas fa-user-plus me-1"></i>Create Account
+                    </a>
+                </div>
             {% endif %}
         </div>
     </div>
 </nav>
 
 <!-- MAIN CONTAINER -->
-<div class="container" style="max-width: 980px; margin-top: 110px;">
+<div class="container" style="max-width: 980px; margin-top: 110px; padding-bottom: 60px;">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
-            <div class="alert alert-{{ category }} glass-alert">
-                {{ message }}
+            <div class="alert alert-{{ category }} glass-alert alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    {% if category == 'success' %}
+                        <i class="fas fa-check-circle me-3" style="color: var(--accent); font-size: 1.2rem;"></i>
+                    {% elif category == 'danger' %}
+                        <i class="fas fa-exclamation-circle me-3" style="color: #ef4444; font-size: 1.2rem;"></i>
+                    {% else %}
+                        <i class="fas fa-info-circle me-3" style="color: var(--primary); font-size: 1.2rem;"></i>
+                    {% endif %}
+                    <div>{{ message }}</div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
     {% endwith %}
@@ -98,7 +170,73 @@
     {% block content %}{% endblock %}
 </div>
 
+<!-- Footer -->
+<footer class="py-4 border-top" style="border-color: var(--border-soft) !important;">
+    <div class="container" style="max-width: 980px;">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <a href="{{ url_for('home') }}" class="text-decoration-none">
+                    <span class="brand-logo" style="font-size: 1.5rem;">Lumière</span>
+                </a>
+                <p class="text-muted mt-2 mb-0" style="font-size: 0.9rem;">
+                    Smart AI Photo Space • Capture, Create, Inspire
+                </p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="d-flex justify-content-md-end gap-4">
+                    <a href="#" class="text-decoration-none text-muted hover-primary">About</a>
+                    <a href="#" class="text-decoration-none text-muted hover-primary">Privacy</a>
+                    <a href="#" class="text-decoration-none text-muted hover-primary">Terms</a>
+                    <a href="#" class="text-decoration-none text-muted hover-primary">Contact</a>
+                </div>
+                <p class="text-muted mt-3 mb-0" style="font-size: 0.85rem;">
+                    © 2023 Lumière. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 20) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Add hover effect to footer links
+    document.addEventListener('DOMContentLoaded', function() {
+        const footerLinks = document.querySelectorAll('.hover-primary');
+        footerLinks.forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.color = 'var(--primary)';
+                this.style.transition = 'color 0.3s';
+            });
+            link.addEventListener('mouseleave', function() {
+                this.style.color = '';
+            });
+        });
+        
+        // Fade in alerts
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                alert.style.transition = 'all 0.4s ease';
+                alert.style.opacity = '1';
+                alert.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    });
+</script>
 </body>
 </html>
