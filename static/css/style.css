@@ -1,21 +1,34 @@
 /* ============================
-   Lumière – Modern Glass Gallery
+   Lumière – Professional Glass Gallery
 =============================== */
 
+/* =============================
+   Color Palette (Professional)
+   ----------------------------
+   --bg-main: Soft neutral background
+   --glass: Glass card transparency
+   --accent: Deep blue-violet (primary)
+   --accent-soft: Cyan light (secondary)
+   --text-dark: Dark grey for text
+   --border-soft: Subtle card borders
+   --shadow-soft: Light shadow for depth
+=============================== */
 :root {
-    --bg-main: #f8f8ff;
-    --glass: rgba(255, 255, 255, 0.8);
-    --accent: #7f5aff;           /* Violet */
-    --accent-soft: #00d1c1;      /* Cyan */
-    --text-dark: #1e1e2f;
+    --bg-main: #f5f5f7;              /* Main page background */
+    --glass: rgba(255, 255, 255, 0.85);
+    --accent: #5b42f3;               /* Deep violet */
+    --accent-soft: #2dd4bf;          /* Cyan secondary */
+    --text-dark: #1c1c24;            /* Text color */
     --border-soft: rgba(255, 255, 255, 0.35);
-    --shadow-soft: rgba(0,0,0,0.08);
+    --shadow-soft: rgba(0, 0, 0, 0.08);
 }
 
-/* BODY */
+/* =============================
+   BODY
+=============================== */
 body {
-    background: radial-gradient(circle at top left, #f0e8ff, transparent 50%),
-                radial-gradient(circle at bottom right, #d0fff9, transparent 50%),
+    background: radial-gradient(circle at top left, #f0f0f5, transparent 50%),
+                radial-gradient(circle at bottom right, #e0f7f5, transparent 50%),
                 var(--bg-main);
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
@@ -24,13 +37,17 @@ body {
     animation: fadeIn 0.6s ease forwards;
 }
 
-/* Fade-in Animation */
+/* =============================
+   Fade-in Animation
+=============================== */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-/* BRAND LOGO */
+/* =============================
+   Brand Logo
+=============================== */
 .brand-logo {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
@@ -39,7 +56,9 @@ body {
     font-weight: 700;
 }
 
-/* NAVBAR */
+/* =============================
+   NAVBAR
+=============================== */
 .navbar {
     background: var(--glass);
     backdrop-filter: blur(25px);
@@ -47,7 +66,9 @@ body {
     transition: background 0.3s;
 }
 
-/* NAV ICONS */
+/* =============================
+   NAV ICONS
+=============================== */
 .nav-icon {
     font-size: 1.3rem;
     color: var(--accent);
@@ -59,43 +80,52 @@ body {
     transform: translateY(-2px);
 }
 
-/* SEARCH INPUT */
+/* =============================
+   SEARCH INPUT
+=============================== */
 .search-input {
     border-radius: 30px;
     border: none;
     padding: 8px 16px;
-    background: rgba(0,0,0,0.04);
+    background: rgba(0, 0, 0, 0.04);
 }
 
-/* GLASS CARDS */
+/* =============================
+   GLASS CARDS
+=============================== */
 .card, .post-card, .auth-card {
     background: var(--glass);
     backdrop-filter: blur(20px);
     border-radius: 24px;
     border: 1px solid var(--border-soft);
     box-shadow: 0 15px 35px var(--shadow-soft);
-    transition: transform 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover, .post-card:hover {
     transform: translateY(-3px);
+    box-shadow: 0 20px 40px var(--shadow-soft);
 }
 
-/* BUTTONS */
+/* =============================
+   BUTTONS
+=============================== */
 .btn-primary {
     background: linear-gradient(135deg, var(--accent), var(--accent-soft));
     border: none;
     font-weight: 600;
-    box-shadow: 0 10px 25px rgba(127, 90, 255, 0.3);
+    box-shadow: 0 10px 25px rgba(91, 66, 243, 0.3);
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(127, 90, 255, 0.35);
+    box-shadow: 0 15px 30px rgba(91, 66, 243, 0.35);
 }
 
-/* DROPDOWN */
+/* =============================
+   DROPDOWN MENUS
+=============================== */
 .glass-menu {
     background: var(--glass);
     backdrop-filter: blur(20px);
@@ -104,7 +134,9 @@ body {
     box-shadow: 0 8px 20px var(--shadow-soft);
 }
 
-/* LINKS */
+/* =============================
+   LINKS
+=============================== */
 .accent-link {
     color: var(--accent);
     font-weight: 500;
@@ -115,7 +147,9 @@ body {
     text-decoration: underline;
 }
 
-/* ALERTS */
+/* =============================
+   ALERTS
+=============================== */
 .glass-alert {
     background: var(--glass);
     border: none;
@@ -123,7 +157,25 @@ body {
     box-shadow: 0 8px 20px var(--shadow-soft);
 }
 
-/* IMAGE HOVER EFFECT */
+/* =============================
+   NAVBAR AVATAR
+=============================== */
+.nav-avatar {
+    width: 34px;
+    height: 34px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    transition: transform 0.3s;
+}
+
+.nav-avatar:hover {
+    transform: scale(1.1);
+}
+
+/* =============================
+   IMAGE HOVER EFFECT
+=============================== */
 .post-card img {
     border-radius: 18px;
     transition: transform 0.3s;
@@ -131,4 +183,20 @@ body {
 
 .post-card img:hover {
     transform: scale(1.03);
+}
+
+/* =============================
+   RESPONSIVE CARD ANIMATION
+=============================== */
+@media (max-width: 768px) {
+    .card, .post-card {
+        border-radius: 18px;
+    }
+}
+
+/* =============================
+   SMOOTH SCROLLING
+=============================== */
+html {
+    scroll-behavior: smooth;
 }
